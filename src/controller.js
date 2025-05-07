@@ -30,7 +30,7 @@ class ProductoController {
 
     async delete(req, res) {
         const producto = req.body;
-        const [result] = await pool.query('DELETE FROM Productos WHERE id=(?)', [producto.id]);
+        const [result] = await pool.query('DELETE FROM productos WHERE id=(?)', [producto.id]);
         res.json({"Reguistros eliminados": result.affectedRows});
     }
 
@@ -43,7 +43,7 @@ class ProductoController {
             }
     
             const [result] = await pool.query(
-                `UPDATE Productos 
+                `UPDATE productos 
                     SET nombre = ?, codigo_barra = ?, categoria = ?, marca = ?, 
                         fecha_vencimiento = ?, fecha_ingreso = ?, stock_actual = ?, 
                         precio_unitario = ?, rotacion = ?, estado = ?, 
