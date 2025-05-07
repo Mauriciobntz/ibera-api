@@ -1,10 +1,29 @@
-import mysqlConnection from 'mysql2/promise'
+require('dotenv').config();
+const express = require('express');
+const mysql = require('mysql2/promise');
 
-const properties = {
-    host: 'firebrick-weasel-544564.hostingersite.com',       // Host de la base de datos
-    user: 'u872190053_iberaadmin',          
-    password: 'Bera-1234',
-    database: 'u872190053_ibera'
-}
+const app = express();
+const port = process.env.PORT || 3000;
 
-export const pool = mysqlConnection.createPool(properties);
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+app.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT NOW() AS fecha');
+    res.json({ status: 'ok', fecha: rows[0].fecha });
+  } catch (err) {
+    res.status(500).json({ error: 'Error en la base de datos', detalles: err.message });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`API corriendo en puerto ${port}`);
+});
