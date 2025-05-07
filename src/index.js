@@ -10,5 +10,6 @@ app.use(express.json());
 app.use(router);
 
 app.listen(app.get('port'), () => {
-  console.log(`Server running on port ${app.get('port')}`);
+  console.log(`Servidor en funcionamiento: API disponible en http://localhost:${app.get('port')}`);
+  console.log('Conexión exitosa a la API.');
 });
