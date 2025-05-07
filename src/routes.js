@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { producto } from './controller.js';
 import { cliente } from './controller.js';
 import { promocion } from './controller.js';
+import { combo } from './controller.js';
+
 
 
 export const router = Router();
