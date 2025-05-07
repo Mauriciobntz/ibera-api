@@ -36,3 +36,9 @@ router.get('/promociones', promocion.getAll);
 router.post('/promocion', promocion.add);
 router.delete('/promocion', promocion.delete);
 router.put('/promocion', promocion.update);
+
+// Rutas para combos
+router.get('/combos', combo.getAll);
+router.post('/combo', combo.add);
+router.delete('/combo', combo.delete);
+router.put('/combo', combo.update);
