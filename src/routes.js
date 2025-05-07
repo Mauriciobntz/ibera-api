@@ -14,6 +14,7 @@ router.get('/productos', producto.getAll);
 router.post('/producto', producto.add);
 router.delete('/producto', producto.delete);
 router.put('/producto', producto.update);
+router.get('/productos/:id', (req, res) => producto.getById(req, res));
 
 
 
