@@ -271,3 +271,86 @@ class PromocionesController {
 
 
 export const promocion = new PromocionesController();
+
+class ComboController {
+    
+    async getAll(req, res) {
+        try {
+            const [result] = await pool.query('SELECT * FROM combos');
+            res.json(result);
+        } catch (error) {
+            console.error("Error al obtener combos:", error);
+            res.status(500).json({ error: "Error al obtener los combos" });
+        }
+    }
+
+    async add(req, res) {
+        const combo = req.body;
+
+        try {
+            const [result] = await pool.query(
+                `INSERT INTO combos 
+                (nombre, descripcion, productos_incluidos, precio_total, fecha_creacion)
+                VALUES (?, ?, ?, ?, ?)`,
+                [
+                    combo.nombre,
+                    combo.descripcion,
+                    JSON.stringify(combo.productos_incluidos || []),
+                    combo.precio_total,
+                    combo.fecha_creacion || new Date()
+                ]
+            );
+            res.json({ "id insertado": result.insertId });
+        } catch (error) {
+            console.error("Error al agregar combo:", error);
+            res.status(500).json({ error: "Error al agregar el combo" });
+        }
+    }
+
+    async delete(req, res) {
+        const { id } = req.body;
+
+        try {
+            const [result] = await pool.query('DELETE FROM combos WHERE id = ?', [id]);
+            res.json({ "Registros eliminados": result.affectedRows });
+        } catch (error) {
+            console.error("Error al eliminar combo:", error);
+            res.status(500).json({ error: "Error al eliminar el combo" });
+        }
+    }
+
+    async update(req, res) {
+        const combo = req.body;
+
+        if (!combo.id) {
+            return res.status(400).json({ error: "El ID del combo es obligatorio" });
+        }
+
+        try {
+            const [result] = await pool.query(
+                `UPDATE combos SET 
+                    nombre = ?, 
+                    descripcion = ?, 
+                    productos_incluidos = ?, 
+                    precio_total = ?, 
+                    fecha_creacion = ?
+                WHERE id = ?`,
+                [
+                    combo.nombre,
+                    combo.descripcion,
+                    JSON.stringify(combo.productos_incluidos || []),
+                    combo.precio_total,
+                    combo.fecha_creacion,
+                    combo.id
+                ]
+            );
+            res.json({ "Registros actualizados": result.affectedRows });
+        } catch (error) {
+            console.error("Error al actualizar combo:", error);
+            res.status(500).json({ error: "Error al actualizar el combo" });
+        }
+    }
+}
+
+export const combo = new ComboController();
+
